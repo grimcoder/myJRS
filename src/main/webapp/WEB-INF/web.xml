@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright 2012 Stormpath, Inc. and contributors.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
 
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -29,7 +14,7 @@
 
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.vogella.jersey.first</param-value>
+            <param-value>com.vogella.jersey.first;io.swagger.jaxrs.json;io.swagger.jaxrs.listing</param-value>
         </init-param>
 
         <init-param>
@@ -42,23 +27,49 @@
     </servlet>
 
 
+    <servlet>
+        <servlet-name>DefaultJaxrsConfig</servlet-name>
+        <servlet-class>io.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>
+        <init-param>
+            <param-name>api.version</param-name>
+            <param-value>1.0.0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>swagger.api.title</param-name>
+            <param-value>Swagger Petstore</param-value>
+        </init-param>
+        <init-param>
+            <param-name>swagger.api.basepath</param-name>
+            <param-value>/api</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+
     <servlet-mapping>
         <servlet-name>Hi</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>cross-origin</filter-name>
+        <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+        <init-param>
+            <param-name>allowedOrigins</param-name>
+            <param-value>*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedMethods</param-name>
+            <param-value>GET,POST,DELETE,PUT,HEAD</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedHeaders</param-name>
+            <param-value>origin, content-type, accept</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>cross-origin</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <!--<servlet>-->
-        <!--<servlet-name>Jersey2Config</servlet-name>-->
-        <!--<servlet-class>io.swagger.jaxrs.config.DefaultJaxrsConfig</servlet-class>-->
-        <!--<init-param>-->
-            <!--<param-name>api.version</param-name>-->
-            <!--<param-value>1.0.0</param-value>-->
-        <!--</init-param>-->
-        <!--<init-param>-->
-            <!--<param-name>swagger.api.basepath</param-name>-->
-            <!--<param-value>http://localhost:8080/</param-value>-->
-        <!--</init-param>-->
-        <!--<load-on-startup>2</load-on-startup>-->
-    <!--</servlet>-->
 </web-app>
